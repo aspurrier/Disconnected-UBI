@@ -1,0 +1,12 @@
+FROM registry.access.redhat.com/ubi8/ubi
+USER root:root
+LABEL maintainer="Andrew Spurrier"
+RUN sed --in-place '/^enabled=1/ s/1/0/' /etc/yum/pluginconf.d/subscription-manager.conf
+RUN rm /etc/yum.repos.d/ubi.repo
+ADD http://192.168.6.158/yum/rhel-8-for-x86_64-appstream-rpms.repo /etc/yum.repos.d
+ADD http://192.168.6.158/yum/rhel-8-for-x86_64-baseos-rpms.repo /etc/yum.repos.d
+ADD http://192.168.6.158/yum/rhel-8-for-x86_64-supplementary-rpms.repo /etc/yum.repos.d
+# Update image
+RUN yum update -y && rm -rf /var/cache/yum
+EOT
+
